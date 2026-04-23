@@ -17,33 +17,48 @@ SaaS система управления ценами и остатками дл
 
 ---
 
-# Быстрый старт (для разработчиков)
+# Быстрый старт
+
+## Docker (рекомендуется)
+
+git clone https://github.com/lazylidd/Dezhurny.git  
+cd Dezhurny  
+cp .env.example .env  
+docker compose up --build
+
+Frontend: http://localhost  
+Backend API docs: http://localhost:8000/docs
+
+---
+
+## Локальная разработка
 
 1. Клонировать репозиторий
 
-git clone https://github.com/egorekss/dezhurny.git  
-cd dezhurny
+git clone https://github.com/lazylidd/Dezhurny.git  
+cd Dezhurny
 
 2. Создать env файл
 
 cp .env.example .env
 
-3. Установить зависимости
+3. Запустить backend
 
 cd backend  
-pip install -r requirements.txt
-
-4. Запустить backend
-
+pip install -r requirements.txt  
 uvicorn main:app --reload
 
-После запуска API документация доступна по адресу:
+API документация: http://127.0.0.1:8000/docs
 
-http://127.0.0.1:8000/docs
+4. Запустить frontend
+
+cd frontend  
+npm install  
+npm run dev
 
 5. Запустить тесты
 
-cd backend
+cd backend  
 pytest
 
 40 тестов: unit-тесты на price engine, matching service, auth; интеграционные тесты на FastAPI endpoints.
