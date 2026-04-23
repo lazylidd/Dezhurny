@@ -1855,8 +1855,8 @@ export default function MatchingPage() {
                         const res = await fn(file);
                         alert(`Импортировано: ${res.updated}${res.errors.length ? '\nОшибки:\n' + res.errors.join('\n') : ''}`);
                         await load();
-                      } catch (err: any) {
-                        alert(`Ошибка: ${err.message}`);
+                      } catch (err) {
+                        alert(`Ошибка: ${err instanceof Error ? err.message : String(err)}`);
                       } finally {
                         setXlsImporting(false);
                       }
@@ -1932,8 +1932,8 @@ export default function MatchingPage() {
                         'Сходство': m.best_score != null ? `${Math.round(m.best_score * 100)}%` : '',
                       })), `матчинг_${TAB_NAMES[tab] ?? tab}`);
                     }
-                  } catch (e: any) {
-                    alert(`Ошибка экспорта: ${e.message}`);
+                  } catch (e) {
+                    alert(`Ошибка экспорта: ${e instanceof Error ? e.message : String(e)}`);
                   } finally {
                     setXlsExporting(false);
                   }

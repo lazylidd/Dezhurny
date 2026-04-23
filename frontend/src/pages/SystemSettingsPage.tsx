@@ -109,8 +109,8 @@ function StoreForm({
     setError('');
     try {
       await onSave(form);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
     } finally {
       setSaving(false);
     }
@@ -191,8 +191,8 @@ function StoreRow({ store, onUpdated, onDeleted }: {
     try {
       await deleteStore(store.id);
       onDeleted(store.id);
-    } catch (e: any) {
-      alert(e.message);
+    } catch (e) {
+      alert(e instanceof Error ? e.message : String(e));
     } finally {
       setDeleting(false);
     }
@@ -291,8 +291,8 @@ export default function SystemSettingsPage() {
       const updated = await saveSettings(toAffPayload(affForm));
       setAffForm(toAffForm(updated));
       setAffSaved(true);
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
     } finally {
       setAffSaving(false);
     }
@@ -309,8 +309,8 @@ export default function SystemSettingsPage() {
       await changePassword(pwCurrent, pwNew);
       setPwCurrent(''); setPwNew(''); setPwConfirm('');
       setPwSuccess(true);
-    } catch (err: any) {
-      setPwError(err.message);
+    } catch (err) {
+      setPwError(err instanceof Error ? err.message : String(err));
     } finally {
       setPwSaving(false);
     }
@@ -321,8 +321,8 @@ export default function SystemSettingsPage() {
     try {
       const updated = await updateStore(String(storeId), { auto_promo_sync: val });
       setStores((prev) => prev.map((x) => x.id === updated.id ? { ...x, ...updated } : x));
-    } catch (e: any) {
-      alert(e.message);
+    } catch (e) {
+      alert(e instanceof Error ? e.message : String(e));
     } finally {
       setPromoSyncing(null);
     }

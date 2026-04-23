@@ -13,8 +13,8 @@ export default function LoginPage({ onLogin }: { onLogin: () => void }) {
     try {
       await login(form.login, form.password);
       onLogin();
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
     } finally {
       setLoading(false);
     }

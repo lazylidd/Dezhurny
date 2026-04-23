@@ -182,8 +182,8 @@ export default function StorePage() {
       setProducts(updated);
       clearCache(CACHE_KEYS.uploadPrices, CACHE_KEYS.matching);
       alert(`Синхронизировано ${result.synced} товаров`);
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
     } finally {
       setSyncing(false);
     }

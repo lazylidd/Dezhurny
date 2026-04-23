@@ -289,8 +289,8 @@ export default function UploadPricesPage() {
 
       setUploadProgress(100);
       await new Promise((r) => setTimeout(r, 700));
-    } catch (e: any) {
-      setUploadError(e.message);
+    } catch (e) {
+      setUploadError(e instanceof Error ? e.message : String(e));
     } finally {
       setUploading(false);
       setUploadProgress(null);
@@ -319,8 +319,8 @@ export default function UploadPricesPage() {
         { storeId, storeName, ...res },
       ]);
       await loadUpdates();
-    } catch (e: any) {
-      if (e.name !== 'AbortError') throw e;
+    } catch (e) {
+      if (e instanceof Error && e.name !== 'AbortError') throw e;
       // пользователь нажал Стоп — молча завершаем
     } finally {
       delete recalcAbort.current[storeId];
@@ -389,8 +389,8 @@ export default function UploadPricesPage() {
       await loadUpdates();
       fetchPromoSyncLog().then(setPromoLog).catch(() => {});
       clearCache(CACHE_KEYS.matching, ...stores.map((s) => CACHE_KEYS.store(String(s.id))), CACHE_KEYS.store('yam16'), CACHE_KEYS.store('yam21'));
-    } catch (e: any) {
-      if (e.name !== 'AbortError') throw e;
+    } catch (e) {
+      if (e instanceof Error && e.name !== 'AbortError') throw e;
     } finally {
       applyAbort.current = null;
       setApplying(false);
@@ -421,8 +421,8 @@ export default function UploadPricesPage() {
       const res = await resetPriceUpdates(selectedStoreId ?? undefined, days);
       await loadUpdates();
       alert(`Удалено записей: ${res.deleted}`);
-    } catch (e: any) {
-      alert(e.message);
+    } catch (e) {
+      alert(e instanceof Error ? e.message : String(e));
     } finally {
       setResetting(false);
     }

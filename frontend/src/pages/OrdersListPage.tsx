@@ -238,12 +238,15 @@ const TOOLTIP_STYLE = {
   background: '#1f2937', border: 'none', borderRadius: '8px', color: 'white', fontSize: '13px',
 };
 
-function ChartTooltip({ active, payload, label }: any) {
+interface TooltipEntry { name: string; value: number; color: string; dataKey: string; payload: Record<string, unknown>; }
+interface TooltipProps { active?: boolean; payload?: TooltipEntry[]; label?: string; }
+
+function ChartTooltip({ active, payload, label }: TooltipProps) {
   if (!active || !payload?.length) return null;
-  const revenue = payload.find((p: any) => p.dataKey === 'revenue');
-  const profit = payload.find((p: any) => p.dataKey === 'profit');
-  const fees = payload.find((p: any) => p.dataKey === 'fees');
-  const count = payload[0]?.payload?.count;
+  const revenue = payload.find((p) => p.dataKey === 'revenue');
+  const profit = payload.find((p) => p.dataKey === 'profit');
+  const fees = payload.find((p) => p.dataKey === 'fees');
+  const count = payload[0]?.payload?.count as number | undefined;
   return (
     <div style={TOOLTIP_STYLE}>
       <div style={{ padding: '7px 12px', borderBottom: '1px solid #374151', fontWeight: 600 }}>{label}</div>
@@ -443,8 +446,8 @@ export default function OrdersListPage() {
       if (isStoreView && data.length > 0) {
         setFilterStores(new Set([data[0].store_name]));
       }
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
     }
     setLoading(false);
     // Для аналитики магазина: загружаем сводку
@@ -470,8 +473,8 @@ export default function OrdersListPage() {
       const res = await syncOrders(numericStoreId, dateFrom, dateTo);
       setSyncMsg(`Синхронизация завершена: добавлено ${res.added} строк`);
       load();
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
     } finally {
       setSyncing(false);
     }

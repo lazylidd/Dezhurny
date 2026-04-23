@@ -66,13 +66,16 @@ const CHART_TOOLTIP_STYLE = {
   fontSize: '13px',
 };
 
-function CustomTooltip({ active, payload, label }: any) {
+interface TooltipEntry { name: string; value: number; color: string; dataKey: string; }
+interface TooltipProps { active?: boolean; payload?: TooltipEntry[]; label?: string; }
+
+function CustomTooltip({ active, payload, label }: TooltipProps) {
   if (!active || !payload?.length) return null;
   return (
     <div style={CHART_TOOLTIP_STYLE}>
       <div style={{ padding: '8px 12px', borderBottom: '1px solid #374151', fontWeight: 600 }}>{label}</div>
       <div style={{ padding: '8px 12px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-        {payload.map((p: any) => (
+        {payload.map((p) => (
           <div key={p.name} style={{ display: 'flex', justifyContent: 'space-between', gap: '16px' }}>
             <span style={{ color: p.color }}>{p.name}</span>
             <span>{fmtRub(p.value)}</span>

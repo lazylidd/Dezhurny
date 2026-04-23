@@ -8,6 +8,15 @@ import {
 } from '../api/admin';
 import type { Store } from '../types/store';
 
+interface UserFormData {
+  login: string;
+  display_name: string;
+  comment: string;
+  payment_due_date: string;
+  is_admin: boolean;
+  password?: string;
+}
+
 const inputStyle = {
   padding: '7px 10px', border: '1px solid #d1d5db', borderRadius: '6px',
   fontSize: '13px', width: '100%', boxSizing: 'border-box' as const,
@@ -18,7 +27,7 @@ const labelStyle = { fontSize: '12px', color: '#6b7280', marginBottom: '4px', di
 
 interface UserFormProps {
   initial?: Partial<AdminUser>;
-  onSave: (data: any) => Promise<void>;
+  onSave: (data: UserFormData) => Promise<void>;
   onCancel: () => void;
   title: string;
 }
@@ -38,11 +47,11 @@ function UserForm({ initial, onSave, onCancel, title }: UserFormProps) {
     setSaving(true);
     setError('');
     try {
-      const payload: any = { login, display_name: displayName, comment, payment_due_date: paymentDue, is_admin: isAdmin };
+      const payload: UserFormData = { login, display_name: displayName, comment, payment_due_date: paymentDue, is_admin: isAdmin };
       if (password) payload.password = password;
       await onSave(payload);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
     } finally {
       setSaving(false);
     }
@@ -136,8 +145,8 @@ function StoreModal({ stores, userStoreIds, userId, onClose, onRefresh }: StoreM
       await addUserStore(userId, s.id);
       onRefresh();
       setShowNew(false);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
     } finally {
       setSaving(false);
     }
@@ -254,7 +263,7 @@ function UserRow({ user, stores, onRefresh }: UserRowProps) {
   const today = new Date().toISOString().slice(0, 10);
   const isOverdue = user.payment_due_date && user.payment_due_date < today && !user.paid_at;
 
-  async function handleSave(data: any) {
+  async function handleSave(data: UserFormData) {
     await updateUser(user.id, data);
     setEditing(false);
     onRefresh();
@@ -382,8 +391,8 @@ export default function AdminPage() {
       const [u, s] = await Promise.all([fetchAdminUsers(), fetchAllStores()]);
       setUsers(u);
       setStores(s);
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
     } finally {
       setLoading(false);
     }
@@ -391,7 +400,7 @@ export default function AdminPage() {
 
   useEffect(() => { load(); }, []);
 
-  async function handleCreate(data: any) {
+  async function handleCreate(data: UserFormData) {
     await createUser(data);
     setShowCreate(false);
     load();
