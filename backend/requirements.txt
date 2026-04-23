@@ -1,0 +1,17 @@
+fastapi
+uvicorn
+sqlalchemy
+psycopg2-binary
+pandas
+numpy
+openpyxl
+requests
+python-dotenv
+apscheduler
+python-multipart
+pdfplumber
+fpdf2>=2.8.0
+
+# dev / test
+pytest
+httpx

@@ -1,0 +1,29 @@
+node_modules
+dist
+.vscode
+.idea
+__pycache__
+*.pyc
+.DS_Store
+.env
+*.env
+mvm.v4/
+образцы прайс-листов/
+
+# Local dev databases
+*.db
+*.sqlite
+
+# Claude Code assistant files
+.claude/
+
+# Screenshots / local media
+dog/
+скрин настроек.png
+акции апи.rtf
+
+# Nested project copy (local only)
+dezhurny/
+
+# Compiled Windows desktop client
+клиент2 дежурный/
